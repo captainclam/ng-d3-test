@@ -21,6 +21,7 @@ app.controller 'AppCtrl', ($scope) ->
 
 redraw = ->
   svg = d3.select('svg')
+  svg.selectAll('*').remove()
   line = d3.svg.line()
   console.log points
   r = retrieve 'r' # ugh
@@ -62,7 +63,7 @@ enter = (scope, element, attrs) ->
   redraw()
 
   element.on 'click', (e) ->
-    # console.log 'click'
+    console.log 'click'
     # console.log e.target
     if e.target.nodeName is 'circle'
       # alert 'clicked a circle'
@@ -107,6 +108,16 @@ enter = (scope, element, attrs) ->
         if d3.event
           d3.event.preventDefault()
           d3.event.stopPropagation()
+
+        coord = d3.mouse(element[0])
+        offset = (scope.r / 2)
+        console.log 'mouseup. save pos of', item.datum()
+        point = _.findWhere points, id: item.datum().id
+        point.x = coord[0] - offset
+        point.y = coord[1] - offset
+        store 'points', points
+        redraw()
+
         svg.on 'mousemove', null
         svg.on 'mouseup', null
 
