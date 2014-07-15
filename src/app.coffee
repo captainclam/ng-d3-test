@@ -1,13 +1,20 @@
 _.templateSettings.interpolate = /{{([\s\S]+?)}}/g
 
+# just for prototyping
+retrieve = (k) -> JSON.parse localStorage.getItem k
+store = (k, v) -> localStorage.setItem k, JSON.stringify v
+
+points = retrieve('points') or []
+console.log points
+
 app = angular.module 'app', []
 
 app.controller 'AppCtrl', ($scope) ->
-  $scope.r = 64
+  $scope.r = 32
 
   $scope.changeEverything = ->
     console.log 'changeEverything'
-    d3.select('circle').attr('r', $scope.r)
+    d3.selectAll('circle').attr('r', $scope.r)
 
   # $scope.reposition = (e) ->
   #   cx = e.offsetX
@@ -21,6 +28,16 @@ app.directive 'enter', ->
 
     svg = d3.select('svg')
     line = d3.svg.line()
+
+    drawPoint = ({x, y}) ->
+      item = svg.append('circle')
+        .attr('r', scope.r)
+        .attr('cx', x)
+        .attr('cy', y)
+        .attr('fill', 'steelblue')
+
+    for point in points
+      drawPoint point
 
     element.on 'click', (e) ->
       # console.log 'click'
@@ -47,13 +64,13 @@ app.directive 'enter', ->
           lastitem = e.target
         d3.select(e.target).attr('stroke', 'black')
       else
+        # add new point
+        lastitem = null
         x = e.offsetX
         y = e.offsetY
-        item = svg.append('circle')
-          .attr('r', scope.r)
-          .attr('cx', x)
-          .attr('cy', y)
-          .attr('fill', 'steelblue')
+        drawPoint {x, y}
+        points.push {x, y}
+        store 'points', points
 
       d3.selectAll('circle').on 'mousedown', ->
         console.log 'mousedown'
