@@ -14,16 +14,37 @@ app.controller 'AppCtrl', ($scope) ->
   #   cy = e.offsetY
   #   $('circle').attr {cx, cy}
 
+lastitem = null
+
 app.directive 'enter', ->
   return (scope, element, attrs) ->
 
     svg = d3.select('svg')
+    line = d3.svg.line()
 
     element.on 'click', (e) ->
-      console.log 'click'
-      console.log e.target
+      # console.log 'click'
+      # console.log e.target
       if e.target.nodeName is 'circle'
         # alert 'clicked a circle'
+        if lastitem
+          from = [
+            d3.select(lastitem).attr('cx')
+            d3.select(lastitem).attr('cy')
+          ]
+          to = [
+            d3.select(e.target).attr('cx')
+            d3.select(e.target).attr('cy')
+          ]
+          console.log 'draw spline from', lastitem, 'to', e.target
+          svg.append('path')
+            .datum([from, to])
+            .attr('d', line)
+            .attr('class', 'line')
+            # .call(redraw)
+          lastitem = null
+        else
+          lastitem = e.target
         d3.select(e.target).attr('stroke', 'black')
       else
         x = e.offsetX
@@ -53,3 +74,8 @@ app.directive 'enter', ->
       #     d3.event.stopPropagation()
       #     svg.on 'mousemove', null
       #     svg.on 'mouseup', null
+
+
+# if d3.event
+#   d3.event.preventDefault()
+#   d3.event.stopPropagation()
