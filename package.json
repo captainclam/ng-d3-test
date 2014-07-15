@@ -1,0 +1,32 @@
+{
+  "name": "",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "start": "grunt server",
+    "prestart": "bower install; grunt;",
+    "postinstall": "bower install; grunt;"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "coffeeify": "*",
+    "jsdom": "*",
+    "lodash": "*"
+  },
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-cli": "*",
+    "grunt-autoprefixer": "*",
+    "grunt-browserify": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-jade": "*",
+    "grunt-contrib-stylus": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-gh-pages": "*"
+  }
+}
