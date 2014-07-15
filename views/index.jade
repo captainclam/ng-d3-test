@@ -18,6 +18,7 @@ html(lang='en')
     div.app(ng-app="app")
       div(ng-controller="AppCtrl")
         .container
+          button.btn.btn-danger(ng-click="clearStorage()") Clear Storage
           input(ng-model="r", type="range", min="8", max="100", value="16", ng-change="changeEverything()")
           .well.bg-primary RADIUS: {{r}}
           svg(enter)
