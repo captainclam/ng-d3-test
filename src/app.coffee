@@ -65,6 +65,8 @@ enter = (scope, element, attrs) ->
   element.on 'click', (e) ->
     console.log 'click'
     # console.log e.target
+    d3.select(e.target).attr('class', 'selected')
+    
     if e.target.nodeName is 'circle'
       # alert 'clicked a circle'
       if lastitem
@@ -96,6 +98,7 @@ enter = (scope, element, attrs) ->
     d3.selectAll('circle').on 'mousedown', ->
       console.log 'mousedown'
       item = d3.select(this)
+      item.attr('class', 'selected')
 
       svg.on 'mousemove', ->
         coord = d3.mouse(element[0])
@@ -117,6 +120,8 @@ enter = (scope, element, attrs) ->
         point.y = coord[1] - offset
         store 'points', points
         redraw()
+
+        item.attr('class', '')
 
         svg.on 'mousemove', null
         svg.on 'mouseup', null
