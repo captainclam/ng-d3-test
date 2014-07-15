@@ -41,7 +41,7 @@ app.directive 'enter', ->
             .datum([from, to])
             .attr('d', line)
             .attr('class', 'line')
-            # .call(redraw)
+            # .call(redraw) # need to store these lines in array and replan them
           lastitem = null
         else
           lastitem = e.target
@@ -55,27 +55,19 @@ app.directive 'enter', ->
           .attr('cy', y)
           .attr('fill', 'steelblue')
 
-      # d3.selectAll('circle').on 'mousedown', ->
-      #   console.log 'mousedown'
-      #   item = d3.select(this)
+      d3.selectAll('circle').on 'mousedown', ->
+        console.log 'mousedown'
+        item = d3.select(this)
 
-      #   svg.on 'mousemove', ->
-      #     coord = d3.mouse(element[0])
-      #     offset = (scope.r / 2)
-      #     item.attr 'cx', coord[0] - offset
-      #     item.attr 'cy', coord[1] - offset
+        svg.on 'mousemove', ->
+          coord = d3.mouse(element[0])
+          offset = (scope.r / 2)
+          item.attr 'cx', coord[0] - offset
+          item.attr 'cy', coord[1] - offset
 
-      #   svg.on 'mouseup', (e) ->
-      #     d3.event.stopPropagation()
-      #     svg.on 'mousemove', null
-      #     svg.on 'mouseup', null
-
-      #   svg.on 'click', (e) ->
-      #     d3.event.stopPropagation()
-      #     svg.on 'mousemove', null
-      #     svg.on 'mouseup', null
-
-
-# if d3.event
-#   d3.event.preventDefault()
-#   d3.event.stopPropagation()
+        svg.on 'mouseup', (e) ->
+          if d3.event
+            d3.event.preventDefault()
+            d3.event.stopPropagation()
+          svg.on 'mousemove', null
+          svg.on 'mouseup', null
