@@ -13,10 +13,19 @@ app.controller 'AppCtrl', ($scope) ->
 
   $scope.changeEverything = ->
     store 'r', $scope.r
-    d3.selectAll('circle').attr('r', $scope.r)
+
+    d3.selectAll('circle')
+      .attr('r', $scope.r)
+      .attr('fill', $scope.color)
+
+    d3.selectAll('text')
+      .style('font-size', $scope.r + 'px')
+      .attr('fill', $scope.color)
 
   $scope.clearStorage = ->
     localStorage.removeItem 'points'
+    points = []
+    d3.selectAll('svg *').remove()
     redraw()
 
 redraw = ->
@@ -62,6 +71,14 @@ enter = (scope, element, attrs) ->
 
   redraw()
 
+  svg.append("text")
+    .attr("y", 40)
+    .attr("x", 40)
+    .attr("dy", ".47em")                        
+    .style("text-anchor", "start")
+    .style("fill", "#004669")
+    .text("Test Text");
+
   element.on 'click', (e) ->
     console.log 'click'
     # console.log e.target
@@ -95,6 +112,20 @@ enter = (scope, element, attrs) ->
       points.push point
       store 'points', points
 
+
+    d3.selectAll('text').on 'mousedown', ->
+      item = d3.select(this)
+      item.attr('class', 'selected')
+
+      svg.on 'mousemove', ->
+        coord = d3.mouse(element[0])
+        item.attr 'x', coord[0]
+        item.attr 'y', coord[1]
+
+      svg.on 'mouseup', (e) ->
+        svg.on 'mousemove', null
+        svg.on 'mouseup', null
+
     d3.selectAll('circle').on 'mousedown', ->
       console.log 'mousedown'
       item = d3.select(this)
@@ -107,7 +138,6 @@ enter = (scope, element, attrs) ->
         item.attr 'cy', coord[1] - offset
 
       svg.on 'mouseup', (e) ->
-        # todo: update pos in arr
         if d3.event
           d3.event.preventDefault()
           d3.event.stopPropagation()
@@ -116,10 +146,11 @@ enter = (scope, element, attrs) ->
         offset = (scope.r / 2)
         console.log 'mouseup. save pos of', item.datum()
         point = _.findWhere points, id: item.datum().id
-        point.x = coord[0] - offset
-        point.y = coord[1] - offset
-        store 'points', points
-        redraw()
+        if point
+          point.x = coord[0] - offset
+          point.y = coord[1] - offset
+          store 'points', points
+          redraw()
 
         item.attr('class', '')
 
