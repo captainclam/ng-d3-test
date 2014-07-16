@@ -1,0 +1,17 @@
+.app {
+  padding-top: 20px;
+}
+.well {
+  background-color: #428bca;
+}
+.selected {
+  fill: #ffa500;
+}
+.line {
+  fill: none;
+  stroke: #4682b4;
+  stroke-width: 1.5px;
+}
+svg text {
+  cursor: move;
+}
